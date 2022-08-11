@@ -23,6 +23,7 @@ public class StreamDemo {
 //                .filter(author -> author.getAge()<18)
 //                .forEach(author -> System.out.println(author));
         test07();
+//
 
     }
 
