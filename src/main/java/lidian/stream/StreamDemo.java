@@ -22,9 +22,7 @@ public class StreamDemo {
 //                .distinct()
 //                .filter(author -> author.getAge()<18)
 //                .forEach(author -> System.out.println(author));
-        test07();
-
-
+        test14();
     }
 
     private static void test28() {
@@ -237,19 +235,10 @@ public class StreamDemo {
     private static void test14() {
 //        分别获取这些作家的所出书籍的最高分和最低分并打印。
         //Stream<Author>  -> Stream<Book> ->Stream<Integer>  ->求值
-
         List<Author> authors = getAuthors();
-        Optional<Integer> max = authors.stream()
-                .flatMap(author -> author.getBooks().stream())
-                .map(book -> book.getScore())
-                .max((score1, score2) -> score1 - score2);
 
-        Optional<Integer> min = authors.stream()
-                .flatMap(author -> author.getBooks().stream())
-                .map(book -> book.getScore())
-                .min((score1, score2) -> score1 - score2);
-        System.out.println(max.get());
-        System.out.println(min.get());
+
+
     }
 
     private static void test13() {
@@ -269,9 +258,17 @@ public class StreamDemo {
         List<Author> authors = getAuthors();
 
         authors.stream()
-                .map(author -> author.getName())
-                .distinct()
-                .forEach(name -> System.out.println(name));
+                .map(new Function<Author, String>() {
+                    @Override
+                    public String apply(Author author) {
+                        return author.getName();
+                    }
+                })
+                .forEach(new Consumer<String>() {
+                    @Override
+                    public void accept(String s) {
+                    }
+                });
 
     }
 
@@ -292,11 +289,24 @@ public class StreamDemo {
 //        打印所有书籍的名字。要求对重复的元素进行去重。
         List<Author> authors = getAuthors();
 
+//        authors.stream()
+//                .flatMap(author -> author.getBooks().stream())
+//                .distinct()
+//                .forEach(book -> System.out.println(book.getName()));
         authors.stream()
-                .flatMap(author -> author.getBooks().stream())
-                .distinct()
-                .forEach(book -> System.out.println(book.getName()));
+                .flatMap(new Function<Author, Stream<Book>>() {
+                    @Override
+                    public Stream<Book> apply(Author author) {
 
+                        return author.getBooks().stream();
+                    }
+                })
+                .forEach(new Consumer<Book>() {
+                    @Override
+                    public void accept(Book book) {
+                        System.out.println(book);
+                    }
+                });
     }
 
 
